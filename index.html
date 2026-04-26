@@ -557,8 +557,8 @@ body{
     <!-- QR -->
     <div class="qr-card">
       <h2>Código QR para acceso y difusión</h2>
-      <p class="qr-hint">Ingrese la URL donde publicó este archivo (Netlify Drop, GitHub Pages, servidor institucional) para generar el QR definitivo. Descárguelo como imagen e inclúyalo en materiales impresos o diapositivas.</p>
-      <div class="qr-row">
+      
+      <div class="qr-row" style="display:none;">
         <input type="url" placeholder="https://ludigofran-cloud.github.io/hal-evrtb-cc/" value="https://ludigofran-cloud.github.io/hal-evrtb-cc/" id="qr-url">
         <button class="btn" onclick="generateQR()">Generar QR</button>
       </div>
