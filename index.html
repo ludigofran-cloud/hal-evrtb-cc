@@ -601,14 +601,13 @@ body{
       </div>
       <div class="campo">
         <label>Signos digestivos en guardia</label>
-        <select id="signos_dig" style="width:100%;border:1px solid var(--gris-borde);border-radius:var(--radio);padding:.4rem .65rem;font-size:.8rem;font-family:inherit;color:var(--texto);background:#FAFBFC;outline:none;">
-          <option value="">Seleccionar...</option>
-          <option value="Sin alteraciones">Sin alteraciones</option>
-          <option value="Diarrea">Diarrea</option>
-          <option value="Íleo / distensión abdominal">Íleo / distensión abdominal</option>
-          <option value="Vómitos">Vómitos</option>
-          <option value="Combinados">Combinados</option>
-        </select>
+        <div style="border:1px solid var(--gris-borde);border-radius:var(--radio);padding:.4rem .65rem;background:#FAFBFC;font-size:.78rem;">
+          <label style="display:flex;align-items:center;gap:.4rem;margin-bottom:.25rem;font-size:.78rem;color:var(--texto);cursor:pointer;"><input type="checkbox" id="sd_sin" value="Sin alteraciones" style="accent-color:var(--verde);"> Sin alteraciones</label>
+          <label style="display:flex;align-items:center;gap:.4rem;margin-bottom:.25rem;font-size:.78rem;color:var(--texto);cursor:pointer;"><input type="checkbox" id="sd_dia" value="Diarrea" style="accent-color:var(--verde);"> Diarrea</label>
+          <label style="display:flex;align-items:center;gap:.4rem;margin-bottom:.25rem;font-size:.78rem;color:var(--texto);cursor:pointer;"><input type="checkbox" id="sd_ileo" value="Íleo/distensión" style="accent-color:var(--verde);"> Íleo / distensión abdominal</label>
+          <label style="display:flex;align-items:center;gap:.4rem;margin-bottom:.25rem;font-size:.78rem;color:var(--texto);cursor:pointer;"><input type="checkbox" id="sd_vom" value="Vómitos" style="accent-color:var(--verde);"> Vómitos</label>
+          <label style="display:flex;align-items:center;gap:.4rem;font-size:.78rem;color:var(--texto);cursor:pointer;"><input type="checkbox" id="sd_rga" value="Residuo gástrico aumentado" style="accent-color:var(--verde);"> Residuo gástrico aumentado</label>
+        </div>
       </div>
       <div class="campo">
         <label>Destino al cierre del registro</label>
@@ -742,7 +741,7 @@ async function guardarEvaluacion(){
     score_tot: score,
     nivel_riesgo: nivel,
     evol_clinica: document.getElementById('evol_clinica').value,
-    signos_dig: document.getElementById('signos_dig').value,
+    signos_dig: ['sd_sin','sd_dia','sd_ileo','sd_vom','sd_rga'].filter(function(id){ return document.getElementById(id).checked; }).map(function(id){ return document.getElementById(id).value; }).join(' | ') || 'Sin registro',
     destino: document.getElementById('destino').value
   };
   Object.assign(datos, items);
