@@ -588,6 +588,39 @@ body{
       <div class="campo"><label>Días en UCI</label><input type="number" id="dias_uci" min="0" placeholder="Ej. 7"></div>
       <div class="campo"><label>Diagnóstico ingreso</label><input type="text" id="dx_ing" placeholder="Ej. Shock séptico"></div>
     </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-bottom:.75rem;">
+      <div class="campo">
+        <label>Evolución clínica observada</label>
+        <select id="evol_clinica" style="width:100%;border:1px solid var(--gris-borde);border-radius:var(--radio);padding:.4rem .65rem;font-size:.8rem;font-family:inherit;color:var(--texto);background:#FAFBFC;outline:none;">
+          <option value="">Seleccionar...</option>
+          <option value="Estable">Estable</option>
+          <option value="Mejoría">Mejoría</option>
+          <option value="Deterioro clínico">Deterioro clínico</option>
+          <option value="Óbito">Óbito</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label>Signos digestivos en guardia</label>
+        <select id="signos_dig" style="width:100%;border:1px solid var(--gris-borde);border-radius:var(--radio);padding:.4rem .65rem;font-size:.8rem;font-family:inherit;color:var(--texto);background:#FAFBFC;outline:none;">
+          <option value="">Seleccionar...</option>
+          <option value="Sin alteraciones">Sin alteraciones</option>
+          <option value="Diarrea">Diarrea</option>
+          <option value="Íleo / distensión abdominal">Íleo / distensión abdominal</option>
+          <option value="Vómitos">Vómitos</option>
+          <option value="Combinados">Combinados</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label>Destino al cierre del registro</label>
+        <select id="destino" style="width:100%;border:1px solid var(--gris-borde);border-radius:var(--radio);padding:.4rem .65rem;font-size:.8rem;font-family:inherit;color:var(--texto);background:#FAFBFC;outline:none;">
+          <option value="">Seleccionar...</option>
+          <option value="Continúa en UCI">Continúa en UCI</option>
+          <option value="Alta a sala general">Alta a sala general</option>
+          <option value="Traslado a otro centro">Traslado a otro centro</option>
+          <option value="Óbito">Óbito</option>
+        </select>
+      </div>
+    </div>
     <button class="btn" onclick="guardarEvaluacion()" id="btn-guardar" style="width:100%;padding:.6rem;font-size:.85rem;">Guardar evaluación</button>
     <div id="save-msg" style="display:none;margin-top:.6rem;text-align:center;font-size:.78rem;padding:.5rem;border-radius:var(--radio);"></div>
   </div>
@@ -707,7 +740,10 @@ async function guardarEvaluacion(){
     dx_ing: document.getElementById('dx_ing').value,
     arm: '',
     score_tot: score,
-    nivel_riesgo: nivel
+    nivel_riesgo: nivel,
+    evol_clinica: document.getElementById('evol_clinica').value,
+    signos_dig: document.getElementById('signos_dig').value,
+    destino: document.getElementById('destino').value
   };
   Object.assign(datos, items);
 
