@@ -575,6 +575,36 @@ body{
     <p style="font-size:.73rem;color:var(--texto-sec);margin-bottom:.75rem;line-height:1.6;">Complete los datos del paciente y la escala, luego guarde para registrar la evaluación en la base de datos central del estudio.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.75rem;">
       <div class="campo"><label>Nombre de la institución</label><input type="text" id="cod_inst" placeholder="Ej. Hospital Italiano de Buenos Aires"></div>
+      <div class="campo">
+        <label>Provincia</label>
+        <select id="provincia" style="width:100%;border:1px solid var(--gris-borde);border-radius:var(--radio);padding:.4rem .65rem;font-size:.8rem;font-family:inherit;color:var(--texto);background:#FAFBFC;outline:none;">
+          <option value="">Seleccionar...</option>
+          <option>Buenos Aires</option>
+          <option>CABA</option>
+          <option>Catamarca</option>
+          <option>Chaco</option>
+          <option>Chubut</option>
+          <option>Córdoba</option>
+          <option>Corrientes</option>
+          <option>Entre Ríos</option>
+          <option>Formosa</option>
+          <option>Jujuy</option>
+          <option>La Pampa</option>
+          <option>La Rioja</option>
+          <option>Mendoza</option>
+          <option>Misiones</option>
+          <option>Neuquén</option>
+          <option>Río Negro</option>
+          <option>Salta</option>
+          <option>San Juan</option>
+          <option>San Luis</option>
+          <option>Santa Cruz</option>
+          <option>Santa Fe</option>
+          <option>Santiago del Estero</option>
+          <option>Tierra del Fuego</option>
+          <option>Tucumán</option>
+        </select>
+      </div>
       <div class="campo"><label>Código de paciente (anonimizado)</label><input type="text" id="cod_pac" placeholder="Ej. PAC-001"></div>
       <div class="campo"><label>Edad (años)</label><input type="number" id="edad" min="18" max="120" placeholder="Ej. 65"></div>
       <div class="campo"><label>Sexo biológico</label>
@@ -731,6 +761,7 @@ async function guardarEvaluacion(){
 
   var datos = {
     cod_inst: cod_inst,
+    provincia: document.getElementById('provincia').value,
     cod_pac: cod_pac,
     fecha: document.getElementById('fecha-eval').value,
     edad: document.getElementById('edad').value,
