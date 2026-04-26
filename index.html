@@ -605,7 +605,7 @@ body{
           <option>Tucumán</option>
         </select>
       </div>
-      <div class="campo"><label>Código de paciente (anonimizado)</label><input type="text" id="cod_pac" placeholder="Ej. PAC-001"></div>
+      
       <div class="campo"><label>Edad (años)</label><input type="number" id="edad" min="18" max="120" placeholder="Ej. 65"></div>
       <div class="campo"><label>Sexo biológico</label>
         <select id="sexo" style="width:100%;border:1px solid var(--gris-borde);border-radius:var(--radio);padding:.4rem .65rem;font-size:.8rem;font-family:inherit;color:var(--texto);background:#FAFBFC;outline:none;">
@@ -746,8 +746,8 @@ async function guardarEvaluacion(){
   if(score === 0){ alert('Complete al menos un ítem de la escala antes de guardar.'); return; }
   
   var cod_inst = document.getElementById('cod_inst').value.trim();
-  var cod_pac = document.getElementById('cod_pac').value.trim();
-  if(!cod_inst || !cod_pac){ alert('Ingrese el código de institución y el código de paciente antes de guardar.'); return; }
+  var cod_pac = document.querySelector('input[placeholder="Ej. M.G.L. / 000123"]') ? document.querySelector('input[placeholder="Ej. M.G.L. / 000123"]').value.trim() : 'S/D';
+  if(!cod_inst){ alert('Ingrese el nombre de la institución antes de guardar.'); return; }
 
   var checks = document.querySelectorAll('.hal-check');
   var items = {};
