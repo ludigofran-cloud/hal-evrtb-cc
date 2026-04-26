@@ -569,7 +569,29 @@ body{
       </div>
     </div>
 
-    <button class="btn-reset" onclick="resetAll()">Reiniciar evaluación</button>
+    
+  <div id="save-panel" style="border:1px solid var(--gris-borde);border-radius:var(--radio-lg);padding:1.1rem 1.4rem;margin-bottom:.85rem;background:#fff;">
+    <h2 style="font-size:.8rem;font-weight:600;color:var(--azul);margin-bottom:.2rem;">Guardar evaluación en base de datos</h2>
+    <p style="font-size:.73rem;color:var(--texto-sec);margin-bottom:.75rem;line-height:1.6;">Complete los datos del paciente y la escala, luego guarde para registrar la evaluación en la base de datos central del estudio.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.75rem;">
+      <div class="campo"><label>Código de institución</label><input type="text" id="cod_inst" placeholder="Ej. UCI-SGM-01"></div>
+      <div class="campo"><label>Código de paciente (anonimizado)</label><input type="text" id="cod_pac" placeholder="Ej. PAC-001"></div>
+      <div class="campo"><label>Edad (años)</label><input type="number" id="edad" min="18" max="120" placeholder="Ej. 65"></div>
+      <div class="campo"><label>Sexo biológico</label>
+        <select id="sexo" style="width:100%;border:1px solid var(--gris-borde);border-radius:var(--radio);padding:.4rem .65rem;font-size:.8rem;font-family:inherit;color:var(--texto);background:#FAFBFC;outline:none;">
+          <option value="">Seleccionar...</option>
+          <option value="M">Masculino</option>
+          <option value="F">Femenino</option>
+          <option value="I">Indeterminado</option>
+        </select>
+      </div>
+      <div class="campo"><label>Días en UCI</label><input type="number" id="dias_uci" min="0" placeholder="Ej. 7"></div>
+      <div class="campo"><label>Diagnóstico ingreso</label><input type="text" id="dx_ing" placeholder="Ej. Shock séptico"></div>
+    </div>
+    <button class="btn" onclick="guardarEvaluacion()" id="btn-guardar" style="width:100%;padding:.6rem;font-size:.85rem;">Guardar evaluación</button>
+    <div id="save-msg" style="display:none;margin-top:.6rem;text-align:center;font-size:.78rem;padding:.5rem;border-radius:var(--radio);"></div>
+  </div>
+<button class="btn-reset" onclick="resetAll()">Reiniciar evaluación</button>
 
     <!-- FOOTER -->
     <div class="footer">
@@ -652,6 +674,70 @@ function resetAll(){
   document.querySelectorAll('.hal-check').forEach(function(c){c.checked=false;});
   document.querySelectorAll('.hal-item').forEach(function(i){i.classList.remove('checked');});
   recalc();
+}
+
+
+const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxNoiWUAtFQICzN_DXrItCKE0ENjB07Pf6e4IZgnZpJqfEHg3dfclJTxZDTF1LZSdo0/exec";
+
+async function guardarEvaluacion(){
+  var score = parseInt(document.getElementById('score-num').textContent);
+  if(score === 0){ alert('Complete al menos un ítem de la escala antes de guardar.'); return; }
+  
+  var cod_inst = document.getElementById('cod_inst').value.trim();
+  var cod_pac = document.getElementById('cod_pac').value.trim();
+  if(!cod_inst || !cod_pac){ alert('Ingrese el código de institución y el código de paciente antes de guardar.'); return; }
+
+  var checks = document.querySelectorAll('.hal-check');
+  var items = {};
+  var nombres = ['it01_sed','it02_shk','it03_alb','it04_nut','it05_opi','it06_atb','it07_ile','it08_sof','it09_inm','it10_vmp'];
+  checks.forEach(function(c,i){ items[nombres[i]] = c.checked ? 1 : 0; });
+
+  var nivel = '';
+  if(score <= 4) nivel = 'BAJO';
+  else if(score <= 9) nivel = 'MODERADO';
+  else nivel = 'ALTO';
+
+  var datos = {
+    cod_inst: cod_inst,
+    cod_pac: cod_pac,
+    fecha: document.getElementById('fecha-eval').value,
+    edad: document.getElementById('edad').value,
+    sexo: document.getElementById('sexo').value,
+    dias_uci: document.getElementById('dias_uci').value,
+    dx_ing: document.getElementById('dx_ing').value,
+    arm: '',
+    score_tot: score,
+    nivel_riesgo: nivel
+  };
+  Object.assign(datos, items);
+
+  var btn = document.getElementById('btn-guardar');
+  var msg = document.getElementById('save-msg');
+  btn.textContent = 'Guardando...';
+  btn.disabled = true;
+  msg.style.display = 'none';
+
+  try{
+    var response = await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(datos)
+    });
+    msg.style.display = 'block';
+    msg.style.background = 'var(--verde-cl)';
+    msg.style.color = 'var(--verde)';
+    msg.textContent = 'Evaluacion guardada correctamente en la base de datos.';
+    btn.textContent = 'Guardar evaluacion';
+    btn.disabled = false;
+  } catch(err){
+    msg.style.display = 'block';
+    msg.style.background = 'var(--rojo-cl)';
+    msg.style.color = 'var(--rojo)';
+    msg.textContent = 'Error al conectar. Verifique su conexion a internet.';
+    btn.textContent = 'Guardar evaluacion';
+    btn.disabled = false;
+  }
 }
 
 document.getElementById('fecha-eval').valueAsDate=new Date();
