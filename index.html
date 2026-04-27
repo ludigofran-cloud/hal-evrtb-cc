@@ -822,10 +822,11 @@ recalc();
 
 <script>
 (function(){
-  fetch('https://ipapi.co/json/')
-    .then(function(r){ return r.json(); })
-    .then(function(d){
-      if(d.country_code && d.country_code !== 'AR'){
+  fetch('https://ipapi.co/country/')
+    .then(function(r){ return r.text(); })
+    .then(function(country){
+      country = country.trim();
+      if(country && country !== 'AR' && country.length === 2){
         var block = document.getElementById('geo-block');
         if(block){ block.style.display='flex'; }
         var saveBtn = document.getElementById('btn-guardar');
