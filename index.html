@@ -809,5 +809,31 @@ document.getElementById('fecha-eval').valueAsDate=new Date();
 setTimeout(function(){ generateQR(); }, 800);
 recalc();
 </script>
+
+<div id="geo-block" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#fff;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;">
+  <div style="max-width:400px;">
+    <div style="width:80px;height:80px;border-radius:50%;background:#FDECEC;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:2.5rem;">🌎</div>
+    <h2 style="font-family:'DM Sans',sans-serif;font-size:1.2rem;font-weight:600;color:#1B3A6B;margin-bottom:.75rem;">Acceso restringido</h2>
+    <p style="font-family:'DM Sans',sans-serif;font-size:.85rem;color:#4A5568;line-height:1.7;margin-bottom:.5rem;">Esta aplicación forma parte de un estudio multicéntrico nacional y su uso está restringido a instituciones de la <strong>República Argentina</strong>.</p>
+    <p style="font-family:'DM Sans',sans-serif;font-size:.75rem;color:#718096;line-height:1.6;">Si pertenece a una institución argentina y recibió este mensaje por error, comuníquese con el equipo investigador.</p>
+    <p style="font-family:'DM Sans',sans-serif;font-size:.7rem;color:#a0aec0;margin-top:1rem;">HAL-EVRTB-CC · Lic. Hernán Aníbal Lascano · INPI N° ref. 3808717</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  fetch('https://ipapi.co/json/')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if(d.country_code && d.country_code !== 'AR'){
+        var block = document.getElementById('geo-block');
+        if(block){ block.style.display='flex'; }
+        var saveBtn = document.getElementById('btn-guardar');
+        if(saveBtn){ saveBtn.disabled=true; }
+      }
+    })
+    .catch(function(){ });
+})();
+</script>
 </body>
 </html>
